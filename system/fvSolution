@@ -1,0 +1,29 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.6                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+pi 3.14;
+piBy2 1.57;
+
+SPVPPC
+{
+    //pRefCell                15;
+    pRefPoint               (0 0 0); //  ($piBy2 $piBy2 0);
+    pRefValue               0;
+    nNonOrthogonalCorrectors 0;
+    
+    regularizationOn         true;
+}
+// ************************************************************************* //
