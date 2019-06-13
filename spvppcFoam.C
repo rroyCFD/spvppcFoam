@@ -91,16 +91,8 @@ int main(int argc, char *argv[])
         // Project velocity, mass-flux and pressure
         #include "projectFields.H"
 
-        if(regularizationOn)
-        {
-            // Energy-conservative generalization of non-linear convection term
-            #include "getC6.H"
-        }
-        else
-        {
-            // regular projection solver
-            convection = explConvection(phiProj,UProj);
-        }
+        // Explicit approximation of the convection term
+        #include "getConvectionTerm.H"
 
         // Velocity projection: Pressure correction steps
         {

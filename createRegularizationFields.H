@@ -1,3 +1,9 @@
+// Check the convection-term-regularization order?
+word regularizationOrder(
+        piso.dict().lookupOrDefault<word>("regularizationOrder","projection"));
+Info << "regularizationOrder: " << regularizationOrder << endl;
+
+
 // Coefficients for filtering
 dimensionedScalar d1
 (

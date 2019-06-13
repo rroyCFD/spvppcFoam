@@ -63,11 +63,6 @@ autoPtr<incompressible::turbulenceModel> turbulence
     incompressible::turbulenceModel::New(U, phi, laminarTransport)
 );
 
-// Check whether if convection-term-regularization is on?
-bool regularizationOn(piso.dict().lookupOrDefault<bool>("regularizationOn",true));
-Info << "regularizationOn: " << regularizationOn << endl;
-
-
 #include "createMRF.H"
 #include "createFvOptions.H"
 
