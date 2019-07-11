@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
     const scalar kappa(0.5); // 2nd order explicit Adam-Bashforth scheme
 
     regularizationModel C4Regularization(U, phi, pp, pRefCell, pRefValue);
+    C4Regularization.setRegOn(regOn);
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

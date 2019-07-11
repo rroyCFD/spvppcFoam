@@ -66,6 +66,5 @@ autoPtr<incompressible::turbulenceModel> turbulence
 #include "createMRF.H"
 #include "createFvOptions.H"
 
-//#include "createRegularizationFields.H"
-
-
+// Check the convection-term-regularization on or off (projection)
+bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
