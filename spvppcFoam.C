@@ -50,15 +50,11 @@ Description
     - run-time selectable MRF and finite volume options, e.g. explicit porosity
 
 \*---------------------------------------------------------------------------*/
-
 #include "fvCFD.H"
 #include "singlePhaseTransportModel.H"
 #include "turbulentTransportModel.H"
 #include "pisoControl.H"
 #include "fvOptions.H"
-
-#include "filterDefinition.H"
-#include "expConvectionFunction.H"
 
 #include "regularizationModel.H"
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -77,13 +73,11 @@ int main(int argc, char *argv[])
     turbulence->validate();
 
     dimensionedScalar dt = runTime.deltaT();
-    #include "calcDeltaNf2.H"
     const scalar kappa(0.5); // 2nd order explicit Adam-Bashforth scheme
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
     regularizationModel C4Regularization(U, phi, pp, pRefCell, pRefValue);
-    //C4Regularization.delta2().write();
 
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
     Info<< "\nStarting time loop\n" << endl;
 
@@ -92,7 +86,7 @@ int main(int argc, char *argv[])
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
         #include "CourantNo.H"
-        dt = runTime.deltaT();
+         dt = runTime.deltaT();
 
         // Velocity projection: Pressure correction steps
         {

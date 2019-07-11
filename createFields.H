@@ -66,6 +66,6 @@ autoPtr<incompressible::turbulenceModel> turbulence
 #include "createMRF.H"
 #include "createFvOptions.H"
 
-#include "createRegularizationFields.H"
+//#include "createRegularizationFields.H"
 
 
