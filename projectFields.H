@@ -20,10 +20,10 @@ pProj.correctBoundaryConditions();
 
 // filter residual of projected pressure (reduce checker-boards)
 // demonstrated additional marginal dissipation
-{
-    volScalarField pProjF(polyLaplaceFilter(pProj,deltaNf2,d1,d2));
-    volScalarField pDiffF(polyLaplaceFilter((pProj-pProjF),deltaNf2,d1,d2));
-    pProj = (pProjF + pDiffF);
-    pProj.correctBoundaryConditions();
-}
+//{
+//    volScalarField pProjF(polyLaplaceFilter(pProj,deltaNf2,d1,d2));
+//    volScalarField pDiffF(polyLaplaceFilter((pProj-pProjF),deltaNf2,d1,d2));
+//    pProj = (pProjF + pDiffF);
+//    pProj.correctBoundaryConditions();
+//}
 //----------------------------------------------------------------------------//

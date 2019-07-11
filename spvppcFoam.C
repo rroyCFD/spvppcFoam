@@ -59,6 +59,8 @@ Description
 
 #include "filterDefinition.H"
 #include "expConvectionFunction.H"
+
+#include "regularizationModel.H"
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
@@ -79,6 +81,10 @@ int main(int argc, char *argv[])
     const scalar kappa(0.5); // 2nd order explicit Adam-Bashforth scheme
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+    regularizationModel C4Regularization(U, phi, pp, pRefCell, pRefValue);
+    //C4Regularization.delta2().write();
+
+
     Info<< "\nStarting time loop\n" << endl;
 
     while (runTime.loop())
@@ -87,12 +93,6 @@ int main(int argc, char *argv[])
 
         #include "CourantNo.H"
         dt = runTime.deltaT();
-
-        // Project velocity, mass-flux and pressure
-        #include "projectFields.H"
-
-        // Explicit approximation of the convection term
-        #include "getConvectionTerm.H"
 
         // Velocity projection: Pressure correction steps
         {

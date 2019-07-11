@@ -6,7 +6,8 @@ volVectorField explConvection
 )
 {
     // cross product of the convection operation
-    return (fvc::div(ssf_, vvf_, "div(phi,U)") - fvc::div(ssf_)*vvf_ );
+    return (fvc::div(ssf_, vvf_, "div(phi,U)"));
+//    return (fvc::div(ssf_, vvf_, "div(phi,U)") - fvc::div(ssf_)*vvf_ );
 }
 
 

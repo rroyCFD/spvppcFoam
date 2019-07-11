@@ -2,6 +2,8 @@
 
 MRF.correctBoundaryVelocity(U);
 
+C4Regularization.update(); // update the convection term
+
 fvVectorMatrix UEqn
 (
       fvm::Sp((kappa + 0.5)/dt, U)
@@ -9,15 +11,23 @@ fvVectorMatrix UEqn
     - fvm::laplacian(turbulence->nuEff(), U, "laplacian(nuEff,U)")
     ==
     (2*kappa*U.oldTime() - (kappa-0.5)*U.oldTime().oldTime()) / dt
-    - convection   // explicit convection term
-    + fvc::div(turbulence->nuEff()*dev(T(fvc::grad(UProj, "grad(U)"))),
+    - C4Regularization.convectionTerm()   // explicit convection term
+    + fvc::div(turbulence->nuEff()*dev(T(fvc::grad(C4Regularization.Ue(), "grad(U)"))),
                "div(nuEff,devTGradU)") // deviatoric part
     + fvOptions(U)
 );
 
+
 UEqn.relax();
 
 fvOptions.constrain(UEqn);
+
+volScalarField pProj
+(
+    "pProj",
+    ((1+kappa)*p.oldTime() - kappa*p.oldTime().oldTime())
+);
+pProj.correctBoundaryConditions();
 
 if (piso.momentumPredictor())
 {

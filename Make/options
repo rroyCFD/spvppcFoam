@@ -5,7 +5,8 @@ EXE_INC = \
     -I$(LIB_SRC)/transportModels/incompressible/singlePhaseTransportModel \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
-    -I$(LIB_SRC)/sampling/lnInclude
+    -I$(LIB_SRC)/sampling/lnInclude \
+    -I$(WM_PROJECT_USER_DIR)/src/LESRegularization/lnInclude
 
 EXE_LIBS = \
     -lturbulenceModels \
@@ -14,4 +15,6 @@ EXE_LIBS = \
     -lfiniteVolume \
     -lmeshTools \
     -lfvOptions \
-    -lsampling
+    -lsampling \
+    -L$(FOAM_USER_LIBBIN) \
+    -lLESRegularization
