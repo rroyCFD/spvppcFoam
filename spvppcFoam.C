@@ -57,6 +57,11 @@ Description
 #include "fvOptions.H"
 
 #include "regularizationModel.H"
+
+#include "IFstream.H"
+#include "OFstream.H"
+#include "IOmanip.H" // for input/ouput format control
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
@@ -77,6 +82,13 @@ int main(int argc, char *argv[])
 
     regularizationModel C4Regularization(U, phi, pp, pRefCell, pRefValue);
     C4Regularization.setRegOn(regOn);
+
+    #include "readAndDeclareVariables.H"
+    #include "createErrorFields.H"
+    #include "initialize.H"
+    #include "initializePhi.H"
+    #include "errorNorm.H"
+    #include "globalProperties.H"
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -103,6 +115,9 @@ int main(int argc, char *argv[])
         turbulence->correct();
 
         runTime.write();
+
+        #include "errorNorm.H"
+        #include "globalProperties.H"
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
