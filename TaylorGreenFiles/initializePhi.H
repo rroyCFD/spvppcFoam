@@ -30,6 +30,7 @@ if(TaylorGreenVortex && runTime.timeName() == "0")
         Info << "Writing analytical field phi" << endl;
         phi = phiStart;
         phi.write();
+        #include "continuityErrs.H"
     }
 }
 

@@ -68,3 +68,4 @@ autoPtr<incompressible::turbulenceModel> turbulence
 
 // Check the convection-term-regularization on or off (projection)
 bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
+Info << "regularizationOn: " << regOn << endl;

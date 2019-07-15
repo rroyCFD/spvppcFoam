@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     #include "readAndDeclareVariables.H"
     #include "createErrorFields.H"
     #include "initialize.H"
-    #include "initializePhi.H"
+    //#include "initializePhi.H"
     #include "errorNorm.H"
     #include "globalProperties.H"
 
@@ -128,6 +128,5 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
 
 // ************************************************************************* //

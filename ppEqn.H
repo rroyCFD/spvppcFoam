@@ -16,8 +16,11 @@ while (piso.correctNonOrthogonal())
     );
 
     // no correction to reference cell pressure
-    ppEqn.setReference(pRefCell, 0); // getRefCellValue(p, pRefCell)
-    ppEqn.solve(mesh.solver(pp.select(piso.finalInnerIter())));
+    scalar ppRefValue = pRefValue - getRefCellValue(pProj, pRefCell);
+//    Info << "ppRefValue: " << ppRefValue << endl;
+
+    ppEqn.setReference(pRefCell, ppRefValue); //
+    ppEqn.solve(mesh.solver(pp.select(piso.finalNonOrthogonalIter())));
 
     if (piso.finalNonOrthogonalIter())
     {
@@ -29,6 +32,8 @@ while (piso.correctNonOrthogonal())
 // Update the collocated velocity and pressure
 p = (pProj+pp);
 p.correctBoundaryConditions();
+//Info << "pp at refCell: " << getRefCellValue(pp, pRefCell) << endl;
+Info << "p at refCell:  " << getRefCellValue(p, pRefCell) << endl;
 
 // //check whether pp at refCell is smaller than solver tolerence!
 // if(pRefOn)

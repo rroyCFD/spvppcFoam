@@ -43,8 +43,11 @@ if(TaylorGreenVortex)
 
         U = Ustart;
         U.correctBoundaryConditions();
-        Info<< "Writing field U" << endl;
-        U.write();
+
+        // update and write phi
+        phi = (fvc::interpolate(U) & mesh.Sf());
+        phi.write();
+        #include "continuityErrs.H"
 
         p = pstart;
         p.correctBoundaryConditions();

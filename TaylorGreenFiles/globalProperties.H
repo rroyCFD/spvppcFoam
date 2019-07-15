@@ -1,9 +1,16 @@
 if(TaylorGreenVortex)
 {
     // Dissipation rate weighted average
-//    epsilon = 2*(magSqr(symm(fvc::grad(U)))*laminarTransport.nu())().weightedAverage(mesh.V()) /(Uinit*Uinit*Uinit/L);
+    // epsilon = 2*(magSqr(symm(fvc::grad(U)))*laminarTransport.nu())().weightedAverage(mesh.V()) /(Uinit*Uinit*Uinit/L);
 
-    volScalarField  dissipation = (U & fvc::laplacian(turbulence->nuEff(), U));
+    volScalarField  dissipation =
+        (U &
+            (
+                fvc::laplacian(turbulence->nuEff(), U)
+              + fvc::div(turbulence->nuEff()*dev(T(fvc::grad(U))))
+            )
+        );
+
     epsilon = dissipation.weightedAverage(mesh.V())/(Uinit*Uinit*Uinit/L);
 
     // Kinetic enery weighted average
