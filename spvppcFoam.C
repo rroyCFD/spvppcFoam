@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
 
     #include "readAndDeclareVariables.H"
     #include "createErrorFields.H"
+
     #include "initialize.H"
     //#include "initializePhi.H"
     #include "errorNorm.H"
@@ -118,6 +119,7 @@ int main(int argc, char *argv[])
 
         #include "errorNorm.H"
         #include "globalProperties.H"
+
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"

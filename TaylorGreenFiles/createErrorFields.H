@@ -10,8 +10,9 @@ volVectorField Ustart
         IOobject::NO_READ,
         IOobject::NO_WRITE // AUTO_WRITE
     ),
-    mesh,
-    dimensionedVector("Ustart",dimVelocity,vector::zero)
+    // mesh,
+    // dimensionedVector("Ustart",dimVelocity,vector::zero)
+    U
 );
 
 volScalarField pstart
@@ -24,8 +25,9 @@ volScalarField pstart
         IOobject::NO_READ,
         IOobject::NO_WRITE // AUTO_WRITE
     ),
-    mesh,
-    dimensionedScalar("pstart",dimensionSet(0, 2, -2, 0, 0, 0, 0), 0.0)
+    // mesh,
+    // dimensionedScalar("pstart",dimensionSet(0, 2, -2, 0, 0, 0, 0), 0.0)
+    p
 );
 
 volVectorField Uerror

@@ -19,7 +19,7 @@ if(TaylorGreenVortex)
                        - vector(0,1,0) * cos(x_c/L) * sin(y_c/L) * cos(z_c/L)
                        + vector(0,0,1) * scalar(0.));
 
-        pstart = sqr(Uinit)/16 * (cos(2.*x_c/L) + cos(2.*y_c/L)) * (cos(2.*y_c/L) + 2);
+        pstart = sqr(Uinit)/16 * (cos(2.*x_c/L) + cos(2.*y_c/L)) * (cos(2.*z_c/L) + 2);
     }
 
      if(pRefOn)
@@ -41,6 +41,7 @@ if(TaylorGreenVortex)
             Info<< "\nInitializing Taylor-Greem Vortex flow with Re = "<< Re.value() << "\n" << endl;
         }
 
+        Ustart.write();
         U = Ustart;
         U.correctBoundaryConditions();
 
@@ -49,6 +50,7 @@ if(TaylorGreenVortex)
         phi.write();
         #include "continuityErrs.H"
 
+        pstart.write();
         p = pstart;
         p.correctBoundaryConditions();
         Info << "pressure value at ref. cell " << getRefCellValue(p, pRefCell) << endl;

@@ -29,10 +29,11 @@ if(TaylorGreenVortex && dimension =="2D")
     pLinfErr.value() = gMax(mag(perror)()); // infinity norm
     pL2err = sqrt(magSqr(perror)().weightedAverage(mesh.V()));  // 2nd norm
 
-    Info << "L2   error norm | Velocity: " << UL2err.value()
-         << "\tPressure: " << pL2err.value()   << endl;
     Info << "Linf error norm | Velocity: " << ULinfErr.value()
          << "\tPressure: " << pLinfErr.value() << endl;
+    Info << "L2   error norm | Velocity: " << UL2err.value()
+         << "\tPressure: " << pL2err.value()   << endl;
+
 
     Info << "Pressure decay coeffs: " << setprecision(10)
          << Foam::exp(-4.0*nu.value()*runTime.value()) << endl;
