@@ -57,6 +57,8 @@ Description
 #include "fvOptions.H"
 
 #include "regularizationModel.H"
+#include "TaylorGreenVortex2D.H"
+#include "TaylorGreenVortex3D.H"
 
 #include "IFstream.H"
 #include "OFstream.H"
@@ -72,6 +74,9 @@ int main(int argc, char *argv[])
     #include "createTime.H"
     #include "createMesh.H"
     pisoControl piso(mesh, "SPVPPC");
+
+    Info << "Non-orthogonal correctors: " <<  piso.nNonOrthCorr() << endl;
+
     #include "createFields.H"
     #include "initContinuityErrs.H"
 
@@ -83,13 +88,26 @@ int main(int argc, char *argv[])
     regularizationModel C4Regularization(U, phi, pp, pRefCell, pRefValue);
     C4Regularization.setRegOn(regOn);
 
-    #include "readAndDeclareVariables.H"
-    #include "createErrorFields.H"
+//    TaylorGreenVortex2D TGV2D(U, phi, p, pRefCell);
+//    TGV2D.setPrecision(8); // set log data precision
 
-    #include "initialize.H"
-    //#include "initializePhi.H"
-    #include "errorNorm.H"
-    #include "globalProperties.H"
+//    // initialize  time=0 fields as analytical
+//    TGV2D.setInitialFieldsAsAnalytical();
+
+//    // copy the analytical fields
+//    if(runTime.startTime().value() == 0)
+//    {
+//        Info << "Time " << runTime.startTime().value()
+//             << ": making U and p analytical; phi is interpolated." << endl;
+
+//        U   = TGV2D.getUAnalytical();
+//        phi = TGV2D.getPhiAnalytical();
+//        p   = TGV2D.getPAnalytical();
+//    }
+
+    TaylorGreenVortex3D TGV3D(U, phi, p);
+    TGV3D.setPrecision(8);
+    TGV3D.setInitialFieldsAsAnalytical(U, phi, p);
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -117,9 +135,22 @@ int main(int argc, char *argv[])
 
         runTime.write();
 
-        #include "errorNorm.H"
-        #include "globalProperties.H"
 
+        // Taylor-Green vortex
+//        // calculate error fields and error norms
+//        TGV2D.calcError();
+
+//        // calculate Global Ek and epsilon values
+//        TGV2D.calcGlobalProperties();
+
+//        // write to log files
+//        TGV2D.write();
+
+        // calculate Global Ek and epsilon values
+        TGV3D.calcGlobalProperties();
+
+        // write to log files
+        TGV3D.write();
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
