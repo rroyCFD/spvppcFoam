@@ -57,8 +57,9 @@ Description
 #include "fvOptions.H"
 
 #include "regularizationModel.H"
-#include "TaylorGreenVortex2D.H"
-#include "TaylorGreenVortex3D.H"
+//#include "TaylorGreenVortex2D.H"
+//#include "TaylorGreenVortex3D.H"
+#include "TaylorGreenVortex.H"
 
 #include "IFstream.H"
 #include "OFstream.H"
@@ -88,26 +89,17 @@ int main(int argc, char *argv[])
     regularizationModel C4Regularization(U, phi, pp, pRefCell, pRefValue);
     C4Regularization.setRegOn(regOn);
 
-//    TaylorGreenVortex2D TGV2D(U, phi, p, pRefCell);
-//    TGV2D.setPrecision(8); // set log data precision
 
-//    // initialize  time=0 fields as analytical
-//    TGV2D.setInitialFieldsAsAnalytical();
+    // Taylor Green Vortex object initialization
+    TaylorGreenVortex TGV(U, phi, p, pRefCell);
 
-//    // copy the analytical fields
-//    if(runTime.startTime().value() == 0)
-//    {
-//        Info << "Time " << runTime.startTime().value()
-//             << ": making U and p analytical; phi is interpolated." << endl;
+    if(runTime.startTime().value() == 0)
+    {
+        TGV.setInitialFieldsAsAnalytical();
+    }
 
-//        U   = TGV2D.getUAnalytical();
-//        phi = TGV2D.getPhiAnalytical();
-//        p   = TGV2D.getPAnalytical();
-//    }
-
-    TaylorGreenVortex3D TGV3D(U, phi, p);
-    TGV3D.setPrecision(8);
-    TGV3D.setInitialFieldsAsAnalytical(U, phi, p);
+    TGV.setupProperties();
+    //TGV.setPrecision(#); // default is 12
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -137,20 +129,8 @@ int main(int argc, char *argv[])
 
 
         // Taylor-Green vortex
-//        // calculate error fields and error norms
-//        TGV2D.calcError();
-
-//        // calculate Global Ek and epsilon values
-//        TGV2D.calcGlobalProperties();
-
-//        // write to log files
-//        TGV2D.write();
-
-        // calculate Global Ek and epsilon values
-        TGV3D.calcGlobalProperties();
-
-        // write to log files
-        TGV3D.write();
+        TGV.calcProperties();
+        TGV.writeProperties();
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
