@@ -7,7 +7,10 @@ adjustPhi(phi, U, p);
 volScalarField rAU(1.0/UEqn.A());
 constrainPressure(p, U, phi, rAU, MRF);
 
+
 // Non-orthogonal pressure corrector loop
+pp.primitiveFieldRef() = 0.0;
+
 while (piso.correctNonOrthogonal())
 {
     fvScalarMatrix ppEqn
@@ -17,7 +20,7 @@ while (piso.correctNonOrthogonal())
 
     // no correction to reference cell pressure
     scalar ppRefValue = pRefValue - getRefCellValue(pProj, pRefCell);
-//    Info << "ppRefValue: " << ppRefValue << endl;
+    // Info << "ppRefValue: " << ppRefValue << endl;
 
     ppEqn.setReference(pRefCell, ppRefValue); //
     ppEqn.solve(mesh.solver(pp.select(piso.finalNonOrthogonalIter())));

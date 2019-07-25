@@ -76,7 +76,8 @@ int main(int argc, char *argv[])
     #include "createMesh.H"
     pisoControl piso(mesh, "SPVPPC");
 
-    Info << "Non-orthogonal correctors: " <<  piso.nNonOrthCorr() << endl;
+    Info << piso.name() <<": Non-orthogonal correctors: "
+         << piso.nNonOrthCorr() << endl;
 
     #include "createFields.H"
     #include "initContinuityErrs.H"
@@ -86,7 +87,8 @@ int main(int argc, char *argv[])
     dimensionedScalar dt = runTime.deltaT();
     const scalar kappa(0.5); // 2nd order explicit Adam-Bashforth scheme
 
-    regularizationModel C4Regularization(U, phi, pp, pRefCell, pRefValue);
+    regularizationModel C4Regularization
+            (U, phi, pp, pRefCell, pRefValue, piso.nNonOrthCorr());
     C4Regularization.setRegOn(regOn);
 
 
@@ -132,6 +134,14 @@ int main(int argc, char *argv[])
         TGV.calcProperties();
         TGV.writeProperties();
 
+
+        // kinetic energy analysis
+        // C4Regularization.getConvectionKE();
+        // C4Regularization.getPGradKE();
+        C4Regularization.analyzeKEBalance();
+
+        #include "gradPDiff.H"
+
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
             << nl << endl;
@@ -143,3 +153,4 @@ int main(int argc, char *argv[])
 }
 
 // ************************************************************************* //
+
