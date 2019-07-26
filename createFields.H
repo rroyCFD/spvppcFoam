@@ -69,3 +69,18 @@ autoPtr<incompressible::turbulenceModel> turbulence
 // Check the convection-term-regularization on or off (projection)
 bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
 Info << "regularizationOn: " << regOn << endl;
+
+
+volVectorField pGradLS
+(
+        IOobject
+        (
+            "pGradLS",
+            runTime.timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        mesh,
+        dimensionedVector("",dimensionSet(0, 1, -2, 0, 0, 0, 0),vector::zero)
+);

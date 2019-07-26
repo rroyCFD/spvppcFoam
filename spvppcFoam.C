@@ -65,6 +65,10 @@ Description
 #include "OFstream.H"
 #include "IOmanip.H" // for input/ouput format control
 
+#define watch(x) Info << (#x) << " is " << (x) << endl;
+
+//#include "leastSquarePressureGradient.H"
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
@@ -107,6 +111,8 @@ int main(int argc, char *argv[])
 
     Info<< "\nStarting time loop\n" << endl;
 
+    // symmTensorField LHS = leastSquareGradientCoeffs(mesh);
+
     while (runTime.loop())
     {
         Info<< "Time = " << runTime.timeName() << nl << endl;
@@ -127,20 +133,21 @@ int main(int argc, char *argv[])
         laminarTransport.correct();
         turbulence->correct();
 
-        runTime.write();
+        // getLSGrad(LHS, p, pGradLS);
+        // volVectorField pGradDifference("pGradDifference", fvc::grad(p) - pGradLS);
+        // pGradDifference.write(runTime.outputTime());
 
 
         // Taylor-Green vortex
         TGV.calcProperties();
         TGV.writeProperties();
 
-
         // kinetic energy analysis
-        // C4Regularization.getConvectionKE();
-        // C4Regularization.getPGradKE();
         C4Regularization.analyzeKEBalance();
 
         #include "gradPDiff.H"
+
+        runTime.write();
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
@@ -150,6 +157,7 @@ int main(int argc, char *argv[])
     Info<< "End\n" << endl;
 
     return 0;
+
 }
 
 // ************************************************************************* //
