@@ -71,16 +71,6 @@ bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
 Info << "regularizationOn: " << regOn << endl;
 
 
-volVectorField pGradLS
-(
-        IOobject
-        (
-            "pGradLS",
-            runTime.timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE
-        ),
-        mesh,
-        dimensionedVector("",dimensionSet(0, 1, -2, 0, 0, 0, 0),vector::zero)
-);
+// least square estimation of pressure gradient
+volSymmTensorField LHS = leastSquareGradientCoeffs(mesh, runTime);
+LHS.write();

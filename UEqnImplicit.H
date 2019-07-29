@@ -38,7 +38,7 @@ if (piso.momentumPredictor())
     // solve(UEqn == -fvc::reconstruct(fvc::snGrad(p)* mesh.magSf()));
 
     // Approach 3
-    solve(UEqn == -getLSGrad(LHS, p)); // use least square gradient minimization of pGrad
+    solve(UEqn == -getLSGrad(LHS, p)); // use least square minimization of pGrad
 
     // fvOptions.correct(U); // source corrrection applied after pressure solve
 }

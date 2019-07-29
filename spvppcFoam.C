@@ -57,17 +57,14 @@ Description
 #include "fvOptions.H"
 
 #include "regularizationModel.H"
-//#include "TaylorGreenVortex2D.H"
-//#include "TaylorGreenVortex3D.H"
 #include "TaylorGreenVortex.H"
+#include "leastSquarePressureGradient.H"
 
 #include "IFstream.H"
 #include "OFstream.H"
 #include "IOmanip.H" // for input/ouput format control
 
 #define watch(x) Info << (#x) << " is " << (x) << endl;
-
-#include "leastSquarePressureGradient.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -108,14 +105,7 @@ int main(int argc, char *argv[])
     //TGV.setPrecision(#); // default is 12
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-    volSymmTensorField LHS = leastSquareGradientCoeffs(mesh, runTime);
-    LHS.write();
-
-
     Info<< "\nStarting time loop\n" << endl;
-
-
-
     while (runTime.loop())
     {
         Info<< "Time = " << runTime.timeName() << nl << endl;
@@ -135,11 +125,6 @@ int main(int argc, char *argv[])
         // Solve for turbulence model related fields
         laminarTransport.correct();
         turbulence->correct();
-
-
-        // volVectorField pGradDifference("pGradDifference", fvc::grad(p) - pGradLS);
-        // pGradDifference.write(runTime.outputTime());
-
 
         // Taylor-Green vortex
         TGV.calcProperties();
