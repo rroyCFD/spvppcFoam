@@ -67,7 +67,7 @@ Description
 
 #define watch(x) Info << (#x) << " is " << (x) << endl;
 
-//#include "leastSquarePressureGradient.H"
+#include "leastSquarePressureGradient.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -108,10 +108,13 @@ int main(int argc, char *argv[])
     //TGV.setPrecision(#); // default is 12
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+    volSymmTensorField LHS = leastSquareGradientCoeffs(mesh, runTime);
+    LHS.write();
+
 
     Info<< "\nStarting time loop\n" << endl;
 
-    // symmTensorField LHS = leastSquareGradientCoeffs(mesh);
+
 
     while (runTime.loop())
     {
@@ -133,7 +136,7 @@ int main(int argc, char *argv[])
         laminarTransport.correct();
         turbulence->correct();
 
-        // getLSGrad(LHS, p, pGradLS);
+
         // volVectorField pGradDifference("pGradDifference", fvc::grad(p) - pGradLS);
         // pGradDifference.write(runTime.outputTime());
 
@@ -161,4 +164,3 @@ int main(int argc, char *argv[])
 }
 
 // ************************************************************************* //
-

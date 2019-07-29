@@ -45,8 +45,12 @@ Info << "p at refCell:  " << getRefCellValue(p, pRefCell) << endl;
 //          << "pp[pRefCell]: " << pp[pRefCell] << endl;
 // }
 
+// Approach 1
+// U -= (fvc::grad(pp, "grad(p)") * (dt/(kappa + 0.5)) );
 
-U -= (fvc::grad(pp, "grad(p)") * (dt/(kappa + 0.5)) );
+// Approach 3:
+U -= getLSGrad(LHS, pp)* (dt/(kappa + 0.5)) ;
+
 //U.correctBoundaryConditions(); // updated in laminar transport model
 U.correctBoundaryConditions();
 fvOptions.correct(U);
