@@ -31,16 +31,7 @@ pProj.correctBoundaryConditions();
 
 if (piso.momentumPredictor())
 {
-    // Approach 1
-    // solve(UEqn == - fvc::grad(pProj, "grad(p)"));   // pressure gradient
-
-    //Approach 2
-    // solve(UEqn == -fvc::reconstruct(fvc::snGrad(p)* mesh.magSf()));
-
-    // Approach 3
-    solve(UEqn == -getLSGrad(LHS, p)); // use least square gradient minimization of pGrad
-
-    // fvOptions.correct(U); // source corrrection applied after pressure solve
+     solve(UEqn == - fvc::grad(pProj, "grad(p)"));   // pressure gradient
 }
 
 phi = fvc::interpolate(U) & mesh.Sf(); // update mass flux
