@@ -57,6 +57,7 @@ Description
 #include "fvOptions.H"
 
 #include "regularizationModel.H"
+#include "kineticEnergyAnalysis.H"
 #include "TaylorGreenVortex.H"
 #include "leastSquarePressureGradient.H"
 
@@ -92,6 +93,7 @@ int main(int argc, char *argv[])
             (U, phi, pp, pRefCell, pRefValue, piso.nNonOrthCorr());
     C4Regularization.setRegOn(regOn);
 
+    kineticEnergyAnalysis KE(U, p, C4Regularization.getConvectionTermName());
 
     // Taylor Green Vortex object initialization
     TaylorGreenVortex TGV(U, phi, p, pRefCell);
@@ -131,7 +133,7 @@ int main(int argc, char *argv[])
         TGV.writeProperties();
 
         // kinetic energy analysis
-        C4Regularization.analyzeKEBalance();
+        KE.analyzeKEBalance();
 
         #include "gradPDiff.H"
 
