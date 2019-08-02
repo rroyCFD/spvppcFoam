@@ -137,6 +137,16 @@ int main(int argc, char *argv[])
 
         #include "gradPDiff.H"
 
+        // Least square gradient and error fields
+        volVectorField pGrad("pGrad", fvc::grad(p));
+        pGrad.write(runTime.outputTime());
+
+        tmp<volVectorField> pGradLS = getLSGrad(LHS, p);
+        pGradLS.ref().write(runTime.outputTime());
+
+        tmp<volScalarField> errorGrad = getLSError(pGradLS, p);
+        errorGrad.ref().write(runTime.outputTime());
+
         runTime.write();
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
