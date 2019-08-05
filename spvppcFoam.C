@@ -133,8 +133,7 @@ int main(int argc, char *argv[])
         // kinetic energy analysis
         Info << "time = " << runTime.elapsedCpuTime() << " s" << endl;
         KE.analyzeKEBalance();
-
-        #include "gradPDiff.H"
+        KE.getPPGradDiffKE();
 
         runTime.write();
 
