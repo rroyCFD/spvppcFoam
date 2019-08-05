@@ -57,6 +57,7 @@ Description
 #include "fvOptions.H"
 
 #include "regularizationModel.H"
+#include "HelmholtzRegularizationModel.H"
 #include "kineticEnergyAnalysis.H"
 #include "TaylorGreenVortex.H"
 
@@ -85,11 +86,12 @@ int main(int argc, char *argv[])
     dimensionedScalar dt = runTime.deltaT();
     const scalar kappa(0.5); // 2nd order explicit Adam-Bashforth scheme
 
-    regularizationModel C4Regularization
+    HelmholtzRegularizationModel HRM
             (U, phi, pp, pRefCell, pRefValue, piso.nNonOrthCorr());
-    C4Regularization.setRegOn(regOn);
+    HRM.setRegOn(regOn);
+    HRM.setFilterRatio(filterRatio);
 
-    kineticEnergyAnalysis KE(U, p, C4Regularization.getConvectionTermName());
+    kineticEnergyAnalysis KE(U, p, HRM.getConvectionTermName());
 
     // Taylor Green Vortex object initialization
     TaylorGreenVortex TGV(U, phi, p, pRefCell);

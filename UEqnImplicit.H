@@ -2,7 +2,7 @@
 
 MRF.correctBoundaryVelocity(U);
 
-C4Regularization.update(); // update the convection term
+HRM.update(); // update the convection term
 
 fvVectorMatrix UEqn
 (
@@ -11,8 +11,8 @@ fvVectorMatrix UEqn
     - fvm::laplacian(turbulence->nuEff(), U, "laplacian(nuEff,U)")
     ==
     (2*kappa*U.oldTime() - (kappa-0.5)*U.oldTime().oldTime()) / dt
-    - C4Regularization.convectionTerm()   // explicit convection term
-    + fvc::div(turbulence->nuEff()*dev(T(fvc::grad(C4Regularization.Ue(), "grad(U)"))),
+    - HRM.convectionTerm()   // explicit convection term
+    + fvc::div(turbulence->nuEff()*dev(T(fvc::grad(HRM.Ue(), "grad(U)"))),
                "div(nuEff,devTGradU)") // deviatoric part
     + fvOptions(U)
 );

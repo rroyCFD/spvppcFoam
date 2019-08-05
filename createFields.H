@@ -69,3 +69,8 @@ autoPtr<incompressible::turbulenceModel> turbulence
 // Check the convection-term-regularization on or off (projection)
 bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
 Info << "regularizationOn: " << regOn << endl;
+
+
+// Helmholtz filter ratio
+scalar filterRatio (piso.dict().lookupOrDefault<scalar>("filterRatio", 2.0));
+Info << "filterRatio: " << filterRatio << endl;
