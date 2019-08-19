@@ -91,16 +91,26 @@ int main(int argc, char *argv[])
 
     kineticEnergyAnalysis KE(U, p, C4Regularization.getConvectionTermName());
 
-    // Taylor Green Vortex object initialization
-    TaylorGreenVortex TGV(U, phi, p, pRefCell);
+    // Not necessary to explicitly call the destructor, because
+    // the constructor doesn't execute any member function
+    // and not a recommended C++ practise; see the following web-resource
+    // www.geeksforgeeks.org/possible-call-constructor-destructor-explicitly/
 
-    if(runTime.startTime().value() == 0)
-    {
-        TGV.setInitialFieldsAsAnalytical();
-    }
+    // if(! (KEAnalysis)) // destruct object: if not turned-on in the case setup
+    // {
+    //     KE.~kineticEnergyAnalysis();
+    // }
 
-    TGV.setupProperties();
-    //TGV.setPrecision(#); // default is 12
+     // Taylor Green Vortex object initialization
+     TaylorGreenVortex TGV(U, phi, p, pRefCell);
+
+     if(runTime.startTime().value() == 0)
+     {
+         TGV.setInitialFieldsAsAnalytical();
+     }
+
+     TGV.setupProperties();
+     //TGV.setPrecision(#); // default is 12
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -131,9 +141,13 @@ int main(int argc, char *argv[])
         TGV.writeProperties();
 
         // kinetic energy analysis
-        Info << "time = " << runTime.elapsedCpuTime() << " s" << endl;
-        KE.analyzeKEBalance();
-        KE.getPPGradDiffKE();
+        if(KEAnalysis)
+        {
+             Info << "time = " << runTime.elapsedCpuTime() << " s" << endl;
+             KE.analyzeKEBalance();
+             KE.getPPGradDiffKE();
+        }
+
 
         runTime.write();
 

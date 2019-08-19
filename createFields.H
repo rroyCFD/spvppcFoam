@@ -45,6 +45,7 @@ volVectorField U
 
 label pRefCell = 0;
 scalar pRefValue = 0.0;
+
 setRefCell(p, piso.dict(), pRefCell, pRefValue);
 mesh.setFluxRequired(pp.name());
 
@@ -69,3 +70,8 @@ autoPtr<incompressible::turbulenceModel> turbulence
 // Check the convection-term-regularization on or off (projection)
 bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
 Info << "regularizationOn: " << regOn << endl;
+
+
+// Check for kinetic energy analysis switch
+bool KEAnalysis (piso.dict().lookupOrDefault<bool>("KEAnalysis", false));
+Info << "kinetic energy analysis: " << KEAnalysis << endl;
