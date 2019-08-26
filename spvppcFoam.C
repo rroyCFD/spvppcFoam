@@ -117,15 +117,26 @@ int main(int argc, char *argv[])
     TaylorGreenVortex* TGVPtr;
     bool TGVOn (false);
 
+    fileName dictPath(runTime.constantPath());
+    if(Pstream::parRun())
+    {
+        dictPath = runTime.path()+"/../constant/";
+        Info << "Constant dictionary path: " << dictPath << endl;
+    }
+
     // Check for Taylor Green Vortex
     IOobject TGVPropertiesHeader
     (
         "TaylorGreenVortexProperties",
-        runTime.constant(),
+        dictPath, // runTime.constant(),
         mesh,
         IOobject::NO_READ
     );
 
+    // debug: decomposed case execution: points to processor0/constant folder
+    // Info << TGVPropertiesHeader.path() << endl;
+    // Info << TGVPropertiesHeader.rootPath() << endl;
+    // Info << TGVPropertiesHeader.objectPath() << endl;
 
     if(TGVPropertiesHeader.typeHeaderOk<dictionary>(true))
     {
@@ -139,12 +150,12 @@ int main(int argc, char *argv[])
         TGVPtr->setupProperties();
 
         TGVOn = true;
+        Info << "TGV Object Constructor" << endl;
     }
     else
     {
         delete TGVPtr;
     }
-
 
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -202,6 +213,7 @@ int main(int argc, char *argv[])
     if(TGVOn)
     {
         delete TGVPtr;
+        Info << "TGV Object Destructor" << endl;
     }
 
     return 0;
