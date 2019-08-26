@@ -45,6 +45,7 @@ volVectorField U
 
 label pRefCell = 0;
 scalar pRefValue = 0.0;
+
 setRefCell(p, piso.dict(), pRefCell, pRefValue);
 mesh.setFluxRequired(pp.name());
 
@@ -70,7 +71,10 @@ autoPtr<incompressible::turbulenceModel> turbulence
 bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
 Info << "regularizationOn: " << regOn << endl;
 
-
 // Helmholtz filter ratio
 scalar filterRatio (piso.dict().lookupOrDefault<scalar>("filterRatio", 2.0));
 Info << "filterRatio: " << filterRatio << endl;
+
+// Check for kinetic energy analysis switch
+bool KEAnalysis (piso.dict().lookupOrDefault<bool>("KEAnalysis", false));
+Info << "kinetic energy analysis: " << KEAnalysis << endl;
