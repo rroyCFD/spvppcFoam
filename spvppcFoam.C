@@ -89,6 +89,9 @@ int main(int argc, char *argv[])
             (U, phi, pp, pRefCell, pRefValue, piso.nNonOrthCorr());
     C4Regularization.setRegOn(regOn);
 
+    // only acts if regOn is true
+    C4Regularization.setFilterFieldsDivFree(filterFieldDivFree);
+
     kineticEnergyAnalysis KE(U, p, C4Regularization.getConvectionTermName());
 
     // Not necessary to explicitly call the destructor, because
@@ -219,5 +222,4 @@ int main(int argc, char *argv[])
     return 0;
 
 }
-
 // ************************************************************************* //
