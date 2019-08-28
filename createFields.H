@@ -72,6 +72,18 @@ bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
 Info << "regularizationOn: " << regOn << endl;
 
 
+// Check the whether to set extrapolated-filtered fields to make divergence free
+bool filterFieldDivFree;
+if(regOn)
+{
+    //filterFieldDivFree = readBool(piso.dict().lookup("filterFieldDivFree"));
+    filterFieldDivFree =
+            piso.dict().lookupOrDefault<bool>("filterFieldDivFree", true);
+    Info << "Extrapolated-filtered fields made divergence free: "
+         << filterFieldDivFree << endl;
+}
+
+
 // Check for kinetic energy analysis switch
 bool KEAnalysis (piso.dict().lookupOrDefault<bool>("KEAnalysis", false));
 Info << "kinetic energy analysis: " << KEAnalysis << endl;
