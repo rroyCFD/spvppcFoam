@@ -73,7 +73,7 @@ Info << "regularizationOn: " << regOn << endl;
 
 
 // Check the whether to set extrapolated-filtered fields to make divergence free
-bool filterFieldDivFree;
+bool filterFieldDivFree(true);
 if(regOn)
 {
     //filterFieldDivFree = readBool(piso.dict().lookup("filterFieldDivFree"));
