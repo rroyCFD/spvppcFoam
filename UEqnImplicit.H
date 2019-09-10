@@ -29,6 +29,15 @@ volScalarField pProj
 );
 pProj.correctBoundaryConditions();
 
+
+// if(runTime.write())
+// {
+//     volScalarField pf("pf", HRM.polyLaplaceFilter(pProj));
+//     pf += HRM.polyLaplaceFilter(pProj-pf);
+//     pf.write();
+// }
+
+
 if (piso.momentumPredictor())
 {
      solve(UEqn == - fvc::grad(pProj, "grad(p)"));   // pressure gradient

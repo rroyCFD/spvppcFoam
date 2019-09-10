@@ -65,6 +65,8 @@ Description
 #include "OFstream.H"
 #include "IOmanip.H" // for input/ouput format control
 
+#include "orthogonalSnGrad.H"
+
 #define watch(x) Info << (#x) << " is " << (x) << endl;
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -158,6 +160,12 @@ int main(int argc, char *argv[])
     {
         delete TGVPtr;
     }
+
+
+
+    // Rhie-Chow interpolation stuff
+    const surfaceVectorField ed = mesh.delta()()/mag(mesh.delta()());
+    Foam::fv::orthogonalSnGrad<scalar> faceGradient(mesh);
 
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
