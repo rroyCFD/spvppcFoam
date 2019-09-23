@@ -138,24 +138,30 @@ int main(int argc, char *argv[])
 
         runTime.write();
 
-
+        // Least square gradient and error fields
         if(runTime.write())
         {
-            Info << "Write pressure gradients" << endl;
-            // Least square gradient and error fields
-            volVectorField pGrad("pGrad", fvc::grad(p));
-            pGrad.write();
+            Info << "Writing pressure gradients and coooresponding errors" << endl;
 
+            // gradient estimated by least-square minimization
             tmp<volVectorField> pGradLS = getLSGrad(LHS, p);
             pGradLS.ref().write();
 
-            // tmp<volScalarField> errorGrad = getLSError(pGradLS, p);
-            // errorGrad.ref().write(runTime.outputTime());
+            // error incurred in least-square minimization method
+            tmp<volScalarField> errorGrad = getLSError(pGradLS, p);
+            errorGrad.ref().write();
 
+            // gradient estimated by Gauss midPoint scheme
+            volVectorField pGrad("pGrad", fvc::grad(p));
+            pGrad.write();
+
+            // difference between Gauss-midpoint and least-Square minimization
             volVectorField pGradDiff ("pGradDiff", (pGrad - pGradLS));
             pGradDiff.write();
 
-            volVectorField pSnGrad("pSnGrad", fvc::reconstruct(fvc::snGrad(p)* mesh.magSf()));
+            // gradient by snGrad reconstruction
+            volVectorField pSnGrad
+                ("pSnGrad", fvc::reconstruct(fvc::snGrad(p)* mesh.magSf()));
             pSnGrad.write();
         }
 
