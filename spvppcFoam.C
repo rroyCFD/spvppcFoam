@@ -134,20 +134,30 @@ int main(int argc, char *argv[])
 
         // kinetic energy analysis
         KE.analyzeKEBalance();
-
-        #include "gradPDiff.H"
-
-        // Least square gradient and error fields
-        volVectorField pGrad("pGrad", fvc::grad(p));
-        pGrad.write(runTime.outputTime());
-
-        tmp<volVectorField> pGradLS = getLSGrad(LHS, p);
-        pGradLS.ref().write(runTime.outputTime());
-
-        tmp<volScalarField> errorGrad = getLSError(pGradLS, p);
-        errorGrad.ref().write(runTime.outputTime());
+        KE.getPPGradDiffKE();
 
         runTime.write();
+
+
+        if(runTime.write())
+        {
+            Info << "Write pressure gradients" << endl;
+            // Least square gradient and error fields
+            volVectorField pGrad("pGrad", fvc::grad(p));
+            pGrad.write();
+
+            tmp<volVectorField> pGradLS = getLSGrad(LHS, p);
+            pGradLS.ref().write();
+
+            // tmp<volScalarField> errorGrad = getLSError(pGradLS, p);
+            // errorGrad.ref().write(runTime.outputTime());
+
+            volVectorField pGradDiff ("pGradDiff", (pGrad - pGradLS));
+            pGradDiff.write();
+
+            volVectorField pSnGrad("pSnGrad", fvc::reconstruct(fvc::snGrad(p)* mesh.magSf()));
+            pSnGrad.write();
+        }
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"

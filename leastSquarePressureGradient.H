@@ -157,45 +157,48 @@ tmp<volVectorField> getLSGrad(volSymmTensorField& LHS, volScalarField& p)
     return gradLS;
 }
 
-tmp<volScalarField> getLSError(tmp<volVectorField> gradLS, volScalarField& p)
-{
-    const fvMesh& mesh = p.mesh();
-
-    tmp<volScalarField> terrorGrad
-    (
-        new volScalarField
-            (
-                IOobject
-                (
-                    "errorGrad",
-                    p.instance(),
-                    mesh,
-                    IOobject::NO_READ,
-                    IOobject::AUTO_WRITE
-                ),
-                mesh,
-                dimensionedScalar("",p.dimensions()/dimLength,Zero)
-            )
-    );
-    volScalarField& errorGrad = terrorGrad.ref();
 
 
-    // loop over each cell to find the error
-    volVectorField& vvf = gradLS.ref();
-    surfaceScalarField snGradf = fvc::snGrad(p)*mesh.magSf();
+// // FInd error between least square gradient and reconstructed surfaceNormal grad
+// tmp<volScalarField> getLSError(tmp<volVectorField> gradLS, volScalarField& p)
+// {
+//     const fvMesh& mesh = p.mesh();
 
-    forAll(vvf, cellI)
-    {
-        // list of all faces in a cell
-        const labelList& faceList =  mesh.cells()[cellI];
+//     tmp<volScalarField> terrorGrad
+//     (
+//         new volScalarField
+//             (
+//                 IOobject
+//                 (
+//                     "errorGrad",
+//                     p.instance(),
+//                     mesh,
+//                     IOobject::NO_READ,
+//                     IOobject::AUTO_WRITE
+//                 ),
+//                 mesh,
+//                 dimensionedScalar("",p.dimensions()/dimLength,Zero)
+//             )
+//     );
+//     volScalarField& errorGrad = terrorGrad.ref();
 
-        // loop over all faces in each cell
-        forAll(faceList, faceI)
-        {
-            errorGrad[cellI] += ((vvf[cellI] & mesh.Sf()[faceI]) - snGradf[faceI]);
-        }
-    }
 
-    return terrorGrad;
-}
+//     // loop over each cell to find the error
+//     volVectorField& vvf = gradLS.ref();
+//     surfaceScalarField snGradf = fvc::snGrad(p)*mesh.magSf();
+
+//     forAll(vvf, cellI)
+//     {
+//         // list of all faces in a cell
+//         const labelList& faceList =  mesh.cells()[cellI];
+
+//         // loop over all faces in each cell
+//         forAll(faceList, faceI)
+//         {
+//             errorGrad[cellI] += ((vvf[cellI] & mesh.Sf()[faceI]) - snGradf[faceI]);
+//         }
+//     }
+
+//     return terrorGrad;
+// }
 
