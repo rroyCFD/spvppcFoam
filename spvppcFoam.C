@@ -174,7 +174,6 @@ int main(int argc, char *argv[])
             TGVPtr->writeProperties();
         }
 
-
         // kinetic energy analysis
         if(KEAnalysis)
         {
