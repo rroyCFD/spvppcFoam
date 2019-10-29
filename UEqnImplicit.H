@@ -22,16 +22,30 @@ UEqn.relax();
 
 fvOptions.constrain(UEqn);
 
-volScalarField pProj
+volScalarField pe
 (
-    "pProj",
-    ((1+kappa)*p.oldTime() - kappa*p.oldTime().oldTime())
+
+    IOobject
+    (
+        "pe",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::NO_WRITE
+    ),
+    ((1+kappa)*p.oldTime() - kappa*p.oldTime().oldTime()),
+    p.boundaryField().types()
 );
-pProj.correctBoundaryConditions();
+pe.correctBoundaryConditions();
+
+
+// filter the extrapolated pressure
+#include "filterExtrapolatedPressure.H"
+
 
 if (piso.momentumPredictor())
 {
-     solve(UEqn == - fvc::grad(pProj, "grad(p)"));   // pressure gradient
+     solve(UEqn == - fvc::grad(pe, "grad(p)"));   // pressure gradient
 }
 
 phi = fvc::interpolate(U) & mesh.Sf(); // update mass flux

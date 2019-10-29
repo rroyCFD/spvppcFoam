@@ -19,7 +19,7 @@ while (piso.correctNonOrthogonal())
     );
 
     // no correction to reference cell pressure
-    scalar ppRefValue = pRefValue - getRefCellValue(pProj, pRefCell);
+    scalar ppRefValue = pRefValue - getRefCellValue(pe, pRefCell);
     // Info << "ppRefValue: " << ppRefValue << endl;
 
     ppEqn.setReference(pRefCell, ppRefValue); //
@@ -33,7 +33,7 @@ while (piso.correctNonOrthogonal())
 #include "continuityErrs.H"
 
 // Update the collocated velocity and pressure
-p = (pProj+pp);
+p = (pe + pp);
 p.correctBoundaryConditions();
 //Info << "pp at refCell: " << getRefCellValue(pp, pRefCell) << endl;
 Info << "p at refCell:  " << getRefCellValue(p, pRefCell) << endl;
