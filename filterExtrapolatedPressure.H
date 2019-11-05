@@ -16,28 +16,58 @@
     );
     pef.correctBoundaryConditions();
 
-    volScalarField pePrime
+    tmp<volScalarField> tpePrime
     (
-        IOobject
+        new volScalarField
         (
-            "pePrime",
-            runTime.timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        (pe - pef),
-        p.boundaryField().types()
-    );
+            IOobject
+            (
+                "pePrime",
+                runTime.timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            (pe - pef),
+            p.boundaryField().types()
+        )
+     );
+    volScalarField pePrime = tpePrime.ref();
     pePrime.correctBoundaryConditions();
 
+    // 4th order filter; add filter of the (pe-pef) field
+    pef += C4Regularization.polyLaplaceFilter(pePrime);
+    pef.correctBoundaryConditions();
 
-    pe = pef + C4Regularization.polyLaplaceFilter(pePrime);
-    pe.correctBoundaryConditions();
+    tpePrime.clear();
 
+    // write filtered and residual field
     if(runTime.outputTime())
     {
-        pe.write();
+        pef.write();
+
+        // residual field
+        volScalarField pefPrime
+        (
+            IOobject
+            (
+                "pefPrime",
+                runTime.timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            (pe - pef),
+            p.boundaryField().types()
+        );
+        pefPrime.correctBoundaryConditions();
+        pefPrime.write();
     }
+
+
+    // assign the extrapolate-filtered field to the extrapolated field
+    pe = pef;
+    pe.correctBoundaryConditions();
+
     Info << endl;
 }
