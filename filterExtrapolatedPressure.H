@@ -1,4 +1,5 @@
 // filter the extrapolated pressure
+// p^star = filter(pe) + filter(pe - filter(pe))
 {
     Info << "Filtering the extrapolated pressure" << endl;
     volScalarField pef
@@ -15,6 +16,7 @@
         p.boundaryField().types()
     );
     pef.correctBoundaryConditions();
+
 
     tmp<volScalarField> tpePrime
     (
@@ -41,6 +43,12 @@
 
     tpePrime.clear();
 
+    // bound the filtered pressure field
+    dimensionedScalar peMax ("peMax", pe.dimensions(), gMax(pe));
+    dimensionedScalar peMin ("peMin", pe.dimensions(), gMin(pe));
+    Info << peMax << nl << peMin << endl;
+    pef = max(min(pef, peMax), peMin);
+
     // write filtered and residual field
     if(runTime.outputTime())
     {
@@ -62,8 +70,13 @@
         );
         pefPrime.correctBoundaryConditions();
         pefPrime.write();
-    }
 
+        dimensionedScalar pefPrimeMax
+            ("pefPrimeMax", pefPrime.dimensions(), gMax(pefPrime));
+        dimensionedScalar pefPrimeMin
+            ("pefPrimeMin", pefPrime.dimensions(), gMin(pefPrime));
+        Info << pefPrimeMax << nl << pefPrimeMin << endl;
+    }
 
     // assign the extrapolate-filtered field to the extrapolated field
     pe = pef;
