@@ -35,15 +35,15 @@ while (piso.correctNonOrthogonal())
 // Update the collocated velocity and pressure
 p = (pProj+pp);
 p.correctBoundaryConditions();
-//Info << "pp at refCell: " << getRefCellValue(pp, pRefCell) << endl;
-Info << "p at refCell:  " << getRefCellValue(p, pRefCell) << endl;
 
-// //check whether pp at refCell is smaller than solver tolerence!
-// if(pRefOn)
-// {
-//     Info << "p[pRefCell]: " << p[pRefCell] << tab
-//          << "pp[pRefCell]: " << pp[pRefCell] << endl;
-// }
+//check whether pp at refCell is smaller than solver tolerence!
+if(pRefOn)
+{
+    // Info << "p at ref. cell: " << p[pRefCell] << tab
+    //      << "pp at ref. cell: " << pp[pRefCell] << endl;
+    Info << "p at ref. cell: " << getRefCellValue(p, pRefCell) << nl
+         << "pp at ref. cell: " << getRefCellValue(pp, pRefCell) << endl;
+}
 
 U -= (fvc::grad(pp, "grad(p)") * (dt/(kappa + 0.5)) );
 
