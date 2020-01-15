@@ -6,6 +6,8 @@ EXE_INC = \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
     -I$(LIB_SRC)/sampling/lnInclude \
+    -I$(WM_PROJECT_USER_DIR)/src/TurbulenceModels/turbulenceModels/lnInclude \
+    -I$(WM_PROJECT_USER_DIR)/src/TurbulenceModels/incompressible/lnInclude \
     -I$(WM_PROJECT_USER_DIR)/src/LESRegularization/lnInclude \
     -I$(WM_PROJECT_USER_DIR)/src/TaylorGreenVortex/lnInclude \
     -I./TaylorGreenFiles/
@@ -19,5 +21,7 @@ EXE_LIBS = \
     -lfvOptions \
     -lsampling \
     -L$(FOAM_USER_LIBBIN) \
+    -lturbulenceModels_rroy\
+    -lincompressibleTurbulenceModels_rroy \
     -lLESRegularization \
     -lTaylorGreenVortex
