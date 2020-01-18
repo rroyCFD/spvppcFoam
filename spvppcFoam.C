@@ -86,13 +86,13 @@ int main(int argc, char *argv[])
     const scalar kappa(0.5); // 2nd order explicit Adam-Bashforth scheme
 
     RegularizationModel C4Regularization
-            (U, phi, pp, pRefCell, pRefValue, piso.nNonOrthCorr());
+            (pp, pRefCell, pRefValue, piso.nNonOrthCorr());
     C4Regularization.setRegOn(regOn);
 
     // only acts if regOn is true
     C4Regularization.setFilterFieldsDivFree(filterFieldDivFree);
 
-    kineticEnergyAnalysis KE(U, p, C4Regularization.getConvectionTermName());
+    // kineticEnergyAnalysis KE(U, p, C4Regularization.getConvectionTermName());
 
     // Declare a TGV object pointer and assign if TGV present
     TaylorGreenVortex* TGVPtr;
@@ -164,13 +164,13 @@ int main(int argc, char *argv[])
         turbulence->correct();
 
 
-        // kinetic energy analysis
-        if(KEAnalysis)
-        {
-             Info << "time = " << runTime.elapsedCpuTime() << " s" << endl;
-             KE.analyzeKEBalance();
-             KE.getPPGradDiffKE();
-        }
+        // // kinetic energy analysis
+        // if(KEAnalysis)
+        // {
+        //      Info << "time = " << runTime.elapsedCpuTime() << " s" << endl;
+        //      KE.analyzeKEBalance();
+        //      KE.getPPGradDiffKE();
+        // }
 
 
         // Taylor-Green vortex
