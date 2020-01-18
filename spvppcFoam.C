@@ -56,7 +56,7 @@ Description
 #include "pisoControl.H"
 #include "fvOptions.H"
 
-#include "regularizationModel.H"
+#include "RegularizationModel.H"
 #include "kineticEnergyAnalysis.H"
 #include "TaylorGreenVortex.H"
 
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     dimensionedScalar dt = runTime.deltaT();
     const scalar kappa(0.5); // 2nd order explicit Adam-Bashforth scheme
 
-    regularizationModel C4Regularization
+    RegularizationModel C4Regularization
             (U, phi, pp, pRefCell, pRefValue, piso.nNonOrthCorr());
     C4Regularization.setRegOn(regOn);
 
@@ -93,28 +93,6 @@ int main(int argc, char *argv[])
     C4Regularization.setFilterFieldsDivFree(filterFieldDivFree);
 
     kineticEnergyAnalysis KE(U, p, C4Regularization.getConvectionTermName());
-
-    // Not necessary to explicitly call the destructor, because
-    // the constructor doesn't execute any member function
-    // and not a recommended C++ practise; see the following web-resource
-    // www.geeksforgeeks.org/possible-call-constructor-destructor-explicitly/
-
-    // if(! (KEAnalysis)) // destruct object: if not turned-on in the case setup
-    // {
-    //     KE.~kineticEnergyAnalysis();
-    // }
-
-     // // Taylor Green Vortex object initialization
-     // TaylorGreenVortex TGV(U, phi, p, pRefCell);
-
-     // if(runTime.startTime().value() == 0)
-     // {
-     //     TGV.setInitialFieldsAsAnalytical();
-     // }
-
-     // TGV.setupProperties();
-     // //TGV.setPrecision(#); // default is 12
-
 
     // Declare a TGV object pointer and assign if TGV present
     TaylorGreenVortex* TGVPtr;

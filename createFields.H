@@ -83,30 +83,6 @@ if(regOn)
          << filterFieldDivFree << endl;
 }
 
-
 // Check for kinetic energy analysis switch
 bool KEAnalysis (piso.dict().lookupOrDefault<bool>("KEAnalysis", false));
 Info << "kinetic energy analysis: " << KEAnalysis << endl;
-
-
-//volScalarField LESdelta
-//    (
-//        IOobject
-//        (
-//            "LESdelta",
-//            runTime.timeName(),
-//            mesh,
-//            IOobject::NO_READ,
-//            IOobject::AUTO_WRITE
-//        ),
-//        mesh,
-//        dimensionedScalar("LESdelta", dimLength, SMALL)
-//    );
-
-//if (mesh.objectRegistry::foundObject<volScalarField>("delta"))
-//{
-//    const volScalarField& delta =
-//            mesh.objectRegistry::lookupObject<volScalarField>("delta");
-
-//    LESdelta.primitiveFieldRef() = delta.primitiveField();
-//}
