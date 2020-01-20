@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     // only acts if regOn is true
     C4Regularization.setFilterFieldsDivFree(filterFieldDivFree);
 
-    // kineticEnergyAnalysis KE(U, p, C4Regularization.getConvectionTermName());
+    kineticEnergyAnalysis KE(U, phi, p);
 
     // Declare a TGV object pointer and assign if TGV present
     TaylorGreenVortex* TGVPtr;
@@ -164,13 +164,13 @@ int main(int argc, char *argv[])
         turbulence->correct();
 
 
-        // // kinetic energy analysis
-        // if(KEAnalysis)
-        // {
-        //      Info << "time = " << runTime.elapsedCpuTime() << " s" << endl;
-        //      KE.analyzeKEBalance();
-        //      KE.getPPGradDiffKE();
-        // }
+        // kinetic energy analysis
+        if(KEAnalysis)
+        {
+             Info << "Time = " << runTime.elapsedCpuTime() << " s" << endl;
+             KE.analyzeKEBalance();
+             KE.getPPGradDiffKE();
+        }
 
 
         // Taylor-Green vortex
