@@ -8,6 +8,20 @@ volScalarField rAU(1.0/UEqn.A());
 constrainPressure(p, U, phi, rAU, MRF);
 
 
+// RhieChow flux correction
+if(RhieChow)
+{
+    tmp<surfaceVectorField> gradpDiff_f
+    (
+        (  (fvc::interpolate(fvc::grad(pProj, "grad(p)")) & ed)
+          - faceGradient.snGrad(pProj)
+        ) * ed
+    );
+
+    phi += fvc::interpolate(rAU)* (gradpDiff_f() & mesh.Sf());
+    gradpDiff_f.clear();
+}
+
 // Non-orthogonal pressure corrector loop
 pp.primitiveFieldRef() = 0.0;
 

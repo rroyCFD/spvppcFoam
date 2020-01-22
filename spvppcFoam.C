@@ -64,6 +64,8 @@ Description
 #include "OFstream.H"
 #include "IOmanip.H" // for input/ouput format control
 
+#include "orthogonalSnGrad.H"
+
 #define watch(x) Info << (#x) << " is " << (x) << endl;
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -81,6 +83,10 @@ int main(int argc, char *argv[])
     #include "initContinuityErrs.H"
 
     turbulence->validate();
+
+    // Rhie-Chow interpolation stuff
+    const surfaceVectorField ed = mesh.delta()()/mag(mesh.delta()());
+    Foam::fv::orthogonalSnGrad<scalar> faceGradient(mesh);
 
     dimensionedScalar dt = runTime.deltaT();
     const scalar kappa(0.5); // 2nd order explicit Adam-Bashforth scheme

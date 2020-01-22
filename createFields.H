@@ -71,6 +71,9 @@ autoPtr<incompressible::turbulenceModel> turbulence
 bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
 Info << "regularizationOn: " << regOn << endl;
 
+// Check for the RhieChow correction
+bool RhieChow (piso.dict().lookupOrDefault<bool>("RhieChow", true));
+Info << "RhieChow: " << RhieChow << endl;
 
 // Check the whether to set extrapolated-filtered fields to make divergence free
 bool filterFieldDivFree(true);
