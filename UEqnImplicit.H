@@ -40,6 +40,34 @@ surfaceScalarField& phie = tPhie.ref();
 
 // C4Regularization.update(); // update the convection term
 
+tmp<volVectorField> tconvTerm
+(
+    new volVectorField
+    (
+        IOobject
+        (
+            "convTerm",
+            U.instance(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+        mesh,
+        dimensionedVector("", dimAcceleration, vector::zero)
+    )
+);
+volVectorField& convTerm = tconvTerm.ref();
+
+if(regOn)
+{
+    convTerm = C4RegPtr->getConvectionTerm(phie, Ue);
+}
+else
+{
+    convTerm = fvc::div(phie,Ue);
+}
+
+
 fvVectorMatrix UEqn
 (
       fvm::Sp((kappa + 0.5)/dt, U)
@@ -47,7 +75,7 @@ fvVectorMatrix UEqn
     - fvm::laplacian(turbulence->nuEff(), U, "laplacian(nuEff,U)")
     ==
     (2*kappa*U.oldTime() - (kappa-0.5)*U.oldTime().oldTime()) / dt
-    - C4Regularization.getConvectionTerm(phie, Ue) // explicit convection term
+    - convTerm // dereferenced explicit convection term
     + fvc::div(turbulence->nuEff()*dev(T(fvc::grad(Ue, "grad(U)"))),
                "div(nuEff,devTGradU)") // deviatoric part
     + fvOptions(U)
@@ -56,6 +84,7 @@ fvVectorMatrix UEqn
 // clear temporary extrapolated fields
 tUe.clear();
 tPhie.clear();
+tconvTerm.clear();
 
 UEqn.relax();
 
