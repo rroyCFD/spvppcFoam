@@ -1,4 +1,5 @@
-Info<< "Reading field p\n" << endl;
+// Read fields: p, pp, U and phi(if present) and their old time stepss
+Info<< "Reading field p" << endl;
 volScalarField p
 (
     IOobject
@@ -12,7 +13,18 @@ volScalarField p
     mesh
 );
 
-Info<< "Reading field pp\n" << endl;
+label pRefCell = 0;
+scalar pRefValue = 0.0;
+setRefCell(p, piso.dict(), pRefCell, pRefValue);
+
+const bool pRefOn (p.needReference());
+if(pRefOn)
+{
+    Info << "pRefCell: " << pRefCell << "\tpRefValue: " << pRefValue << tab
+         << "initial field ref value: " << getRefCellValue(p, pRefCell) << endl;
+}
+
+Info<< "Reading field pp" << endl;
 volScalarField pp
 (
     IOobject
@@ -25,8 +37,9 @@ volScalarField pp
     ),
     mesh
 );
+mesh.setFluxRequired(pp.name());
 
-Info<< "Reading field U\n" << endl;
+Info<< "\nReading field U" << endl;
 volVectorField U
 (
     IOobject
@@ -42,19 +55,9 @@ volVectorField U
 
 #include "createPhi.H"
 
-
-label pRefCell = 0;
-scalar pRefValue = 0.0;
-
-setRefCell(p, piso.dict(), pRefCell, pRefValue);
-mesh.setFluxRequired(pp.name());
-
-const bool pRefOn (p.needReference());
-if(pRefOn)
-{
-    Info << "pRefCell: " << pRefCell << "\tpRefValue: " << pRefValue << tab
-         << "initial field ref value: " << getRefCellValue(p, pRefCell) << endl;
-}
+Info    << "\tU.nOldTimes(): "   << U.nOldTimes()   << nl
+        << "\tphi.nOldTimes(): " << phi.nOldTimes() << nl
+        << "\tp.nOldTimes(): "   << p.nOldTimes()   <<nl << endl;
 
 // add transport and turbulence model
 singlePhaseTransportModel laminarTransport(U, phi);
