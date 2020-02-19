@@ -115,6 +115,13 @@ int main(int argc, char *argv[])
     //------------------------------------------------------------------------//
 
     kineticEnergyAnalysis KE(U, phi, p);
+    if(KEAnalysis)
+    {
+        KE.setPropertiesOutput();
+        KE.analyzeKEBalance();
+        KE.getPPGradDiffKE();
+        KE.writeAvgValues();
+    }
 
     // Declare a TGV object pointer and assign if TGV present
     TaylorGreenVortex* TGVPtr;
@@ -192,6 +199,7 @@ int main(int argc, char *argv[])
              Info << "Time = " << runTime.elapsedCpuTime() << " s" << endl;
              KE.analyzeKEBalance();
              KE.getPPGradDiffKE();
+             KE.writeAvgValues();
         }
 
 
