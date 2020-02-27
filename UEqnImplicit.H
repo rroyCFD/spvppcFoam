@@ -60,7 +60,7 @@ volVectorField& convTerm = tconvTerm.ref();
 
 if(regOn)
 {
-    convTerm = C4RegPtr->getConvectionTerm(phie, Ue);
+    convTerm = RegModel->getConvectionTerm(phie, Ue);
 }
 else
 {

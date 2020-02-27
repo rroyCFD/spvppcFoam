@@ -91,25 +91,19 @@ int main(int argc, char *argv[])
     dimensionedScalar dt = runTime.deltaT();
     const scalar kappa(0.5); // 2nd order explicit Adam-Bashforth scheme
 
-    // RegularizationModel C4Regularization
-    //         (pp, pRefCell, pRefValue, piso.nNonOrthCorr());
-    // C4Regularization.setRegOn(regOn);
-
-    // // only acts if regOn is true
-    // C4Regularization.setFilterFieldsDivFree(filterFieldDivFree);
-
-    RegularizationModel* C4RegPtr;
+    // RegularizationModel
+    RegularizationModel* RegModel;
     if(regOn)
     {
-        C4RegPtr = new RegularizationModel(
+        RegModel = new RegularizationModel(
                                 pp, pRefCell, pRefValue, piso.nNonOrthCorr());
-        C4RegPtr->setRegOn(regOn);
-        C4RegPtr->setFilterFieldsDivFree(filterFieldDivFree);
+        RegModel->setRegOn(regOn);
+        RegModel->setFilterFieldsDivFree(filterFieldDivFree);
         Info << "Regularization Object Constructor" << endl;
     }
     else
     {
-        delete C4RegPtr;
+        delete RegModel;
     }
 
     //------------------------------------------------------------------------//
@@ -242,7 +236,7 @@ int main(int argc, char *argv[])
     // Destruct Regularization object pointer
     if(regOn)
     {
-        delete C4RegPtr;
+        delete RegModel;
         Info << "Regularization Object Destructor" << endl;
     }
 
