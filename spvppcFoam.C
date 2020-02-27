@@ -114,13 +114,18 @@ int main(int argc, char *argv[])
 
     //------------------------------------------------------------------------//
 
-    kineticEnergyAnalysis KE(U, phi, p);
+    kineticEnergyAnalysis* KE;
     if(KEAnalysis)
     {
-        KE.setPropertiesOutput();
-        KE.analyzeKEBalance();
-        KE.getPPGradDiffKE();
-        KE.writeAvgValues();
+        KE = new kineticEnergyAnalysis(U, phi, p);
+        KE->setPropertiesOutput();
+        KE->analyzeKEBalance();
+        KE->getAddtionalKETerms();
+        KE->writeAvgValues();
+    }
+    else
+    {
+        delete KE;
     }
 
     // Declare a TGV object pointer and assign if TGV present
@@ -197,9 +202,9 @@ int main(int argc, char *argv[])
         if(KEAnalysis)
         {
              Info << "Time = " << runTime.elapsedCpuTime() << " s" << endl;
-             KE.analyzeKEBalance();
-             KE.getPPGradDiffKE();
-             KE.writeAvgValues();
+             KE->analyzeKEBalance();
+             KE->getAddtionalKETerms();
+             KE->writeAvgValues();
         }
 
 
@@ -225,6 +230,13 @@ int main(int argc, char *argv[])
     {
         delete TGVPtr;
         Info << "TGV Object Destructor" << endl;
+    }
+
+    // Destruct KE object pointer
+    if(KEAnalysis)
+    {
+        delete KE;
+        Info << "KE Object Destructor" << endl;
     }
 
     // Destruct Regularization object pointer
