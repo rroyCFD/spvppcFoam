@@ -83,11 +83,15 @@ if(TGVPropertiesHeader.typeHeaderOk<dictionary>(true))
 
     // Initialize the fields if required
     Switch initialize_(false);
-    initialize_.lookupOrAddToDict("initialize", TGVProperties_);
+    initialize_.readIfPresent("initialize", TGVProperties_);
+    Info << "TGV initialize: " << initialize_ << endl;
 
     if(initialize_ && runTime.startTime().value() == 0)
     {
         TGVPtr->setInitialFieldsAsAnalytical(U, phi, p);
+        U.write();
+        phi.write();
+        p.write();
     }
 }
 else
