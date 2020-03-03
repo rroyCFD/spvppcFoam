@@ -56,15 +56,19 @@ Description
 #include "pisoControl.H"
 #include "fvOptions.H"
 
-#include "RegularizationModel.H"
-#include "kineticEnergyAnalysis.H"
-#include "TaylorGreenVortex.H"
-
 #include "IFstream.H"
 #include "OFstream.H"
 #include "IOmanip.H" // for input/ouput format control
 
 #include "orthogonalSnGrad.H"
+
+#include "RegularizationModel.H"
+
+#include "kineticEnergyAnalysis.H"
+
+#include "TaylorGreenVortex.H"
+#include "TaylorGreenVortex2D.H"
+#include "TaylorGreenVortex3D.H"
 
 #define watch(x) Info << (#x) << " is " << (x) << endl;
 

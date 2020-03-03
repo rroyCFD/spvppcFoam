@@ -1,6 +1,7 @@
 // Declare a Kinetic Energy term-by-term analysis object (if present)
 //------------------------------------------------------------------------//
 
+
 kineticEnergyAnalysis* KE;
 if(KEAnalysis)
 {
@@ -17,8 +18,11 @@ else
 
 //------------------------------------------------------------------------//
 
+
+
+
 // Declare a TGV object pointer and assign if TGV present
-TaylorGreenVortex* TGVPtr;
+TaylorGreenVortex* TGVPtr(nullptr);
 bool TGVOn (false);
 
 fileName dictPath(runTime.constantPath());
@@ -44,17 +48,47 @@ IOobject TGVPropertiesHeader
 
 if(TGVPropertiesHeader.typeHeaderOk<dictionary>(true))
 {
-    TGVPtr = new TaylorGreenVortex(U, phi, p, pRefCell);
+    TGVOn = true;
 
-    if(runTime.startTime().value() == 0)
+    IOdictionary TGVProperties_
+    (
+        IOobject
+        (
+            "TaylorGreenVortexProperties",
+            dictPath,
+            mesh,
+            IOobject::MUST_READ,
+            IOobject::NO_WRITE
+        )
+    );
+
+    const word dimension_(TGVProperties_.lookup("dimension"));
+    // dimension_ = (TGVProperties_.lookupOrDefault<word>("dimension", "1D"))
+
+    if(dimension_ == "2D")
     {
-        TGVPtr->setInitialFieldsAsAnalytical();
+         TGVPtr = new TaylorGreenVortex2D(U, phi, p, pRefCell);
+    }
+    else if(dimension_ == "3D")
+    {
+        TGVPtr = new TaylorGreenVortex3D(U, phi, p);
+    }
+    else
+    {
+        FatalErrorInFunction
+            << "Taylor-Green Vortex dimension " << dimension_ << " is invalid!"
+            << "\n Options are 2D or 3D." << abort(FatalError);
     }
 
-    TGVPtr->setupProperties();
 
-    TGVOn = true;
-    Info << "TGV Object Constructor" << endl;
+    // Initialize the fields if required
+    Switch initialize_(false);
+    initialize_.lookupOrAddToDict("initialize", TGVProperties_);
+
+    if(initialize_ && runTime.startTime().value() == 0)
+    {
+        TGVPtr->setInitialFieldsAsAnalytical(U, phi, p);
+    }
 }
 else
 {

@@ -11,6 +11,6 @@ if(KEAnalysis)
 // Taylor-Green vortex
 if(TGVOn)
 {
-   TGVPtr->calcProperties();
-   TGVPtr->writeProperties();
+   TGVPtr->calcGlobalProperties();
+   TGVPtr->writeGlobalProperties();
 }

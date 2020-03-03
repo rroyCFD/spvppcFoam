@@ -1,4 +1,5 @@
 // RegularizationModel
+
 RegularizationModel* RegModel;
 if(regOn)
 {
