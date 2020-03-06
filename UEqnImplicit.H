@@ -72,7 +72,10 @@ if(regOn)
         UEqn
         ==
         - fvc::grad(pProj, "grad(p)")   // pressure gradient
-        - RegModel->getConvectionTerm(phie, Ue)
+        - (
+            fvc::div(phie,Ue, "div(phi,U")
+            - RegModel->convectionResidual(phie, Ue)
+          )
     );
 }
 else
