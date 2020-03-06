@@ -1,8 +1,12 @@
 // Declare a Kinetic Energy term-by-term analysis object (if present)
 //------------------------------------------------------------------------//
 
-
 kineticEnergyAnalysis* KE;
+
+// Check for kinetic energy analysis switch
+bool KEAnalysis (piso.dict().lookupOrDefault<bool>("KEAnalysis", false));
+Info << "kinetic energy analysis: " << KEAnalysis << endl;
+
 if(KEAnalysis)
 {
     KE = new kineticEnergyAnalysis(U, phi, p);
@@ -17,8 +21,6 @@ else
 }
 
 //------------------------------------------------------------------------//
-
-
 
 
 // Declare a TGV object pointer and assign if TGV present

@@ -20,6 +20,7 @@ setRefCell(p, piso.dict(), pRefCell, pRefValue);
 const bool pRefOn (p.needReference());
 if(pRefOn)
 {
+
     Info << "pRefCell: " << pRefCell << "\tpRefValue: " << pRefValue << tab
          << "initial field ref value: " << getRefCellValue(p, pRefCell) << endl;
 }
@@ -70,25 +71,7 @@ autoPtr<incompressible::turbulenceModel> turbulence
 #include "createMRF.H"
 #include "createFvOptions.H"
 
-// Check the convection-term-regularization on or off (projection)
-bool regOn (piso.dict().lookupOrDefault<bool>("regularizationOn", true));
-Info << "regularizationOn: " << regOn << endl;
-
 // Check for the RhieChow correction
 bool RhieChow (piso.dict().lookupOrDefault<bool>("RhieChow", true));
 Info << "RhieChow: " << RhieChow << endl;
 
-// Check the whether to set extrapolated-filtered fields to make divergence free
-bool filterFieldDivFree(true);
-if(regOn)
-{
-    //filterFieldDivFree = readBool(piso.dict().lookup("filterFieldDivFree"));
-    filterFieldDivFree =
-            piso.dict().lookupOrDefault<bool>("filterFieldDivFree", true);
-    Info << "Extrapolated-filtered fields made divergence free: "
-         << filterFieldDivFree << endl;
-}
-
-// Check for kinetic energy analysis switch
-bool KEAnalysis (piso.dict().lookupOrDefault<bool>("KEAnalysis", false));
-Info << "kinetic energy analysis: " << KEAnalysis << endl;
