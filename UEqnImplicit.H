@@ -50,10 +50,6 @@ fvVectorMatrix UEqn
     + fvOptions(U)
 );
 
-// clear temporary extrapolated fields
-tUe.clear();
-tPhie.clear();
-
 UEqn.relax();
 
 fvOptions.constrain(UEqn);
@@ -87,6 +83,10 @@ else
         - fvc::div(phie,Ue, "div(phi,U")
     );
 }
+
+// clear temporary extrapolated fields
+tUe.clear();
+tPhie.clear();
 
 phi = fvc::interpolate(U) & mesh.Sf(); // update mass flux
 
