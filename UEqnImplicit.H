@@ -61,15 +61,22 @@ volScalarField pProj
 );
 pProj.correctBoundaryConditions();
 
+
 if(regOn)
 {
+    // Because of the non-iterative nature of the algorithy;
+    // it is important to enforce the continuity error of extrapolated phi
+    // is smaller than corrected phi;
+
+    // RegModel->calcContinuityError(phie);
 
     solve(
         UEqn
         ==
         - fvc::grad(pProj, "grad(p)")   // pressure gradient
         - (
-            fvc::div(phie,Ue, "div(phi,U")
+              fvc::div(phie,Ue, "div(phi,U)")
+            - Ue * fvc::div(phie)
             - RegModel->convectionResidual(phie, Ue)
           )
     );
@@ -80,7 +87,10 @@ else
         UEqn
         ==
         - fvc::grad(pProj, "grad(p)")   // pressure gradient
-        - fvc::div(phie,Ue, "div(phi,U")
+        - (
+              fvc::div(phie,Ue, "div(phi,U)")
+            - Ue * fvc::div(phie)
+          )
     );
 }
 
