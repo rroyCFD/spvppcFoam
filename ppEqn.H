@@ -13,8 +13,8 @@ if(RhieChow)
 {
     tmp<surfaceVectorField> gradpDiff_f
     (
-        (  (fvc::interpolate(fvc::grad(pProj, "grad(p)")) & ed)
-          - faceGradient.snGrad(pProj)
+        (  (fvc::interpolate(fvc::grad(p)) & ed)
+          - faceGradient.snGrad(p)
         ) * ed
     );
 
@@ -33,8 +33,7 @@ while (piso.correctNonOrthogonal())
     );
 
     // no correction to reference cell pressure
-    scalar ppRefValue = pRefValue - getRefCellValue(pProj, pRefCell);
-    // Info << "ppRefValue: " << ppRefValue << endl;
+    scalar ppRefValue = pRefValue - getRefCellValue(p, pRefCell);
 
     ppEqn.setReference(pRefCell, ppRefValue); //
     ppEqn.solve(mesh.solver(pp.select(piso.finalNonOrthogonalIter())));
@@ -47,7 +46,7 @@ while (piso.correctNonOrthogonal())
 #include "continuityErrs.H"
 
 // Update the collocated velocity and pressure
-p = (pProj+pp);
+p = (p+pp);
 p.correctBoundaryConditions();
 
 //check whether pp at refCell is smaller than solver tolerence!
