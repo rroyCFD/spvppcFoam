@@ -35,6 +35,11 @@ while (piso.correctNonOrthogonal())
     // no correction to reference cell pressure
     scalar ppRefValue = pRefValue - getRefCellValue(p, pRefCell);
 
+    Info << "p at ref. cell: " << getRefCellValue(p, pRefCell) << nl
+         << "pp at ref. cell: " << getRefCellValue(pp, pRefCell) << endl;
+
+    Info << "ppRefValue: " << ppRefValue << endl;
+
     ppEqn.setReference(pRefCell, ppRefValue); //
     ppEqn.solve(mesh.solver(pp.select(piso.finalNonOrthogonalIter())));
 

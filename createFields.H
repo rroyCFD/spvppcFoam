@@ -15,14 +15,28 @@ volScalarField p
 
 label pRefCell = 0;
 scalar pRefValue = 0.0;
-setRefCell(p, piso.dict(), pRefCell, pRefValue);
 
-const bool pRefOn (p.needReference());
+const bool pRefOn (setRefCell(p, piso.dict(), pRefCell, pRefValue));
 if(pRefOn)
 {
 
     Info << "pRefCell: " << pRefCell << "\tpRefValue: " << pRefValue << tab
          << "initial field ref value: " << getRefCellValue(p, pRefCell) << endl;
+
+    if( mag(getRefCellValue(p, pRefCell) - pRefValue) > SMALL)
+    {
+        dimensionedScalar pCorr
+        (
+            "pCorr",
+            p.dimensions(),
+            (getRefCellValue(p, pRefCell) - pRefValue)
+        );
+        p -= pCorr;
+        p.correctBoundaryConditions();
+
+        Info << "pRefCell: " << pRefCell << "\tpRefValue: " << pRefValue << tab
+        << "corrected field ref value: " <<  getRefCellValue(p, pRefCell) << endl;
+    }
 }
 
 Info<< "Reading field pp" << endl;

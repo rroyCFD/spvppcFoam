@@ -93,6 +93,21 @@ if(TGVPropertiesHeader.typeHeaderOk<dictionary>(true))
         TGVPtr->setInitialFieldsAsAnalytical(U, phi, p);
         U.write();
         phi.write();
+
+        if(pRefOn)
+        {
+            if( mag(getRefCellValue(p, pRefCell) - pRefValue) > SMALL)
+            {
+                dimensionedScalar pCorr
+                (
+                    "pCorr",
+                    p.dimensions(),
+                    (getRefCellValue(p, pRefCell) - pRefValue)
+                );
+                p -= pCorr;
+                p.correctBoundaryConditions();
+            }
+        }
         p.write();
     }
 }
