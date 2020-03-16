@@ -35,10 +35,10 @@ while (piso.correctNonOrthogonal())
     // no correction to reference cell pressure
     scalar ppRefValue = pRefValue - getRefCellValue(p, pRefCell);
 
-    Info << "p at ref. cell: " << getRefCellValue(p, pRefCell) << nl
-         << "pp at ref. cell: " << getRefCellValue(pp, pRefCell) << endl;
+    // Info << "p at ref. cell: " << getRefCellValue(p, pRefCell) << nl
+    //      << "pp at ref. cell: " << getRefCellValue(pp, pRefCell) << endl;
 
-    Info << "ppRefValue: " << ppRefValue << endl;
+    // Info << "ppRefValue: " << ppRefValue << endl;
 
     ppEqn.setReference(pRefCell, ppRefValue); //
     ppEqn.solve(mesh.solver(pp.select(piso.finalNonOrthogonalIter())));
@@ -54,14 +54,12 @@ while (piso.correctNonOrthogonal())
 p = (p+pp);
 p.correctBoundaryConditions();
 
-//check whether pp at refCell is smaller than solver tolerence!
-if(pRefOn)
-{
-    // Info << "p at ref. cell: " << p[pRefCell] << tab
-    //      << "pp at ref. cell: " << pp[pRefCell] << endl;
-    Info << "p at ref. cell: " << getRefCellValue(p, pRefCell) << nl
-         << "pp at ref. cell: " << getRefCellValue(pp, pRefCell) << endl;
-}
+// //check whether pp at refCell is smaller than solver tolerence!
+// if(pRefOn)
+// {
+//     Info << "p at ref. cell: " << getRefCellValue(p, pRefCell) << nl
+//          << "pp at ref. cell: " << getRefCellValue(pp, pRefCell) << endl;
+// }
 
 U -= (fvc::grad(pp, "grad(p)") * (dt/(kappa + 0.5)) );
 
