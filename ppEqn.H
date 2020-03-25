@@ -18,8 +18,14 @@ if(RhieChow)
         ) * ed
     );
 
-    phi += fvc::interpolate(rAU)* (gradpDiff_f() & mesh.Sf());
+    phi =
+        fvc::flux(U)
+        + fvc::interpolate(rAU)* (gradpDiff_f() & mesh.Sf());
     gradpDiff_f.clear();
+}
+else
+{
+    phi = fvc::flux(U);
 }
 
 // Non-orthogonal pressure corrector loop
