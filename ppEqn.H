@@ -62,7 +62,6 @@ p.correctBoundaryConditions();
 // }
 
 U -= (fvc::grad(pp, "grad(p)") * (dt/(kappa + 0.5)) );
-
-//U.correctBoundaryConditions(); // updated in laminar transport model
+U.correctBoundaryConditions(); // updated in laminar transport model
 fvOptions.correct(U);
 // ---------------------------------------------------------------------------//

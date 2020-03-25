@@ -3,10 +3,11 @@
 MRF.correctBoundaryVelocity(U);
 
 // Update U and phi with their respective extrapolated value
-U = ((1+kappa) * U.oldTime() - kappa * U.oldTime().oldTime());
-U.correctBoundaryConditions();
-
 phi = ((1+kappa) * phi.oldTime() - kappa * phi.oldTime().oldTime());
+
+U = ((1+kappa) * U.oldTime() - kappa * U.oldTime().oldTime());
+// U.correctBoundaryConditions(); // updated at UEqn solve
+
 
 
 fvVectorMatrix UEqn
