@@ -1,12 +1,7 @@
 // Non-orthogonal pressure corrector loop ------------------------------------//
-MRF.makeRelative(phi);
-
-adjustPhi(phi, U, p);
 
 // Update the pressure BCs to ensure flux consistency
 volScalarField rAU(1.0/UEqn.A());
-constrainPressure(p, U, phi, rAU, MRF);
-
 
 // RhieChow flux correction
 if(RhieChow)
@@ -27,6 +22,12 @@ else
 {
     phi = fvc::flux(U);
 }
+
+MRF.makeRelative(phi);
+
+adjustPhi(phi, U, p);
+
+constrainPressure(p, U, phi, rAU, MRF);
 
 // Non-orthogonal pressure corrector loop
 pp.primitiveFieldRef() = 0.0;

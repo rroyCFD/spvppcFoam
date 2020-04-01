@@ -34,7 +34,7 @@ p.correctBoundaryConditions();
 
 if(regOn)
 {
-    // Because of the non-iterative nature of the algorithy;
+    // Because of the non-iterative nature of the algorithm;
     // it is important to enforce the continuity error of extrapolated phi
     // is smaller than corrected phi;
 
